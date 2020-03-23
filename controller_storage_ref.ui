@@ -44,29 +44,21 @@
           <item>
            <widget class="QPushButton" name="pushButton_5">
             <property name="text">
-             <string>create json</string>
+             <string>locate_curve_json</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_2"/>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QPushButton" name="pushButton_3">
-            <property name="text">
-             <string>locate_me</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit">
-            <property name="text">
-             <string>require a json file path</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QCheckBox" name="checkBox">
+          <property name="text">
+           <string>create_json</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QListWidget" name="listWidget">

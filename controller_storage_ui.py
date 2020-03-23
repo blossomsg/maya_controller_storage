@@ -8,6 +8,7 @@ from shiboken2 import wrapInstance
 ptr = omui.MQtUtil.mainWindow()
 ptr_instance = wrapInstance(long(ptr), QtWidgets.QWidget)
 
+
 class ControllerStorageUI(QtWidgets.QWidget):
 	"""Preserve the controller in the json and that json will be displayed
 	in the ui. That will help create the controllers
@@ -23,19 +24,41 @@ class ControllerStorageUI(QtWidgets.QWidget):
 
 		# CAVEAT : Duplicate Curve button
 		self.cs_duplicate_curve_qpushbutton = QtWidgets.QPushButton("Duplicate_Curve")
+		self.cs_frame = QtWidgets.QFrame()
+		self.cs_frame.setFrameShape(QtWidgets.QFrame.HLine)
+		self.cs_frame.setLineWidth(5.0)
+		self.cs_preserve_curve_qpushbutton = QtWidgets.QPushButton("Preserve_Curve")
+		self.cs_locate_curve_json_qpushbutton = QtWidgets.QPushButton("Locate_CurveJSON")
+		self.cs_locate_json_path_qlineedit = QtWidgets.QLineEdit()
+		self.cs_json_create_checkbox = QtWidgets.QCheckBox("Create_JSON")
+		self.cs_create_curve_json_qpushbutton = QtWidgets.QPushButton("Locate_CurveJSON")
+		self.cs_create_newjson_path_qlineedit = QtWidgets.QLineEdit()
 
 		# CAVEAT : Layouts
-		self.cs_qpushbutton_hlayout = QtWidgets.QHBoxLayout()  # horizontal layout
+		self.cs_vlayout = QtWidgets.QVBoxLayout()  # vertical layout
+		self.cs_locate_json_hlayout = QtWidgets.QHBoxLayout()  # horizontal layout to locate json
+		self.cs_create_json_hlayout = QtWidgets.QHBoxLayout()  # horizontal layout to create json
+		self.cs_create_json_set_vlayout = QtWidgets.QVBoxLayout()
 
 		# CAVEAT : Adding widgets to layouts
-		self.cs_qpushbutton_hlayout.addWidget(self.cs_duplicate_curve_qpushbutton)
+		self.cs_vlayout.addWidget(self.cs_duplicate_curve_qpushbutton)
+		self.cs_vlayout.addWidget(self.cs_frame)
+		self.cs_vlayout.addWidget(self.cs_preserve_curve_qpushbutton)
+		self.cs_locate_json_hlayout.addWidget(self.cs_locate_curve_json_qpushbutton)
+		self.cs_locate_json_hlayout.addWidget(self.cs_locate_json_path_qlineedit)
+		self.cs_vlayout.addLayout(self.cs_locate_json_hlayout)
+		self.cs_create_json_hlayout.addWidget(self.cs_create_curve_json_qpushbutton)
+		self.cs_create_json_hlayout.addWidget(self.cs_create_newjson_path_qlineedit)
+		self.cs_create_json_set_vlayout.addWidget(self.cs_json_create_checkbox)
+		self.cs_create_json_set_vlayout.addLayout(self.cs_create_json_hlayout)
+		self.cs_vlayout.addLayout(self.cs_create_json_set_vlayout)
 
 		# CAVEAT : UI additional details
-		self.setLayout(self.cs_qpushbutton_hlayout)
+		self.setLayout(self.cs_vlayout)
 		self.setWindowTitle("CS v1.0")
 		# self.setWindowIcon(provide file path)
 		# self.windowIcon(provide file path)
-		self.setFixedSize(300, 100)
+		# self.setFixedSize(300, 100)
 
 
 if __name__ == "__main__":
