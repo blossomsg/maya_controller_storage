@@ -1,7 +1,6 @@
 # module_for_ui
 from PySide2 import QtCore
 from PySide2 import QtWidgets
-from PySide2 import QtGui
 import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
 
@@ -31,14 +30,16 @@ class ControllerStorageUI(QtWidgets.QWidget):
 		self.cs_locate_curve_json_qpushbutton = QtWidgets.QPushButton("Locate_CurveJSON")
 		self.cs_locate_json_path_qlineedit = QtWidgets.QLineEdit()
 		self.cs_json_create_checkbox = QtWidgets.QCheckBox("Create_JSON")
-		self.cs_create_curve_json_qpushbutton = QtWidgets.QPushButton("Locate_CurveJSON")
+		self.cs_create_curve_json_qpushbutton = QtWidgets.QPushButton("Create_CurveJSON")
 		self.cs_create_newjson_path_qlineedit = QtWidgets.QLineEdit()
+		self.cs_curve_dict_listwid = QtWidgets.QListWidget()
+		self.cs_create_selected_curve_qpushbutton = QtWidgets.QPushButton("Create_Selected_Curve")
 
 		# CAVEAT : Layouts
 		self.cs_vlayout = QtWidgets.QVBoxLayout()  # vertical layout
 		self.cs_locate_json_hlayout = QtWidgets.QHBoxLayout()  # horizontal layout to locate json
 		self.cs_create_json_hlayout = QtWidgets.QHBoxLayout()  # horizontal layout to create json
-		self.cs_create_json_set_vlayout = QtWidgets.QVBoxLayout()
+		self.cs_create_json_set_vlayout = QtWidgets.QVBoxLayout() # vertically organize "create json"
 
 		# CAVEAT : Adding widgets to layouts
 		self.cs_vlayout.addWidget(self.cs_duplicate_curve_qpushbutton)
@@ -52,6 +53,8 @@ class ControllerStorageUI(QtWidgets.QWidget):
 		self.cs_create_json_set_vlayout.addWidget(self.cs_json_create_checkbox)
 		self.cs_create_json_set_vlayout.addLayout(self.cs_create_json_hlayout)
 		self.cs_vlayout.addLayout(self.cs_create_json_set_vlayout)
+		self.cs_vlayout.addWidget(self.cs_curve_dict_listwid)
+		self.cs_vlayout.addWidget(self.cs_create_selected_curve_qpushbutton)
 
 		# CAVEAT : UI additional details
 		self.setLayout(self.cs_vlayout)
