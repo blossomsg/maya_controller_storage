@@ -15,10 +15,26 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 		super(ControllerStorageFunc, self).__init__()
 
 		self.cs_duplicate_curve_qpushbutton.clicked.connect(self.cs_duplicate_button_func)
+		# self.cs_locate_create_curve_json_qpushbutton.clicked.connect()
+		self.cs_filename()
+		self.cs_filepath()
 
 	# CAVEAT : Duplicate curve func
 	def cs_duplicate_button_func(self):
 		cmds.duplicate()
+
+	# CAVEAT : Controller storage file name
+	def cs_filename(self):
+		self.cs_json_file_name_qlineedit.setText("controller_storage.json")
+		self.cs_json_file_name_qlineedit.setReadOnly(True)
+	# CAVEAT :
+	def cs_filepath(self):
+		self.cs_preserve_curve_qpushbutton.setEnabled(False)
+		self.cs_locate_json_path_qlineedit.setToolTip("Provide an appropriate directory path")
+		# if self.cs_locate_json_path_qlineedit(filepath):
+		# 	self.cs_preserve_curve_qpushbutton.setEnabled(True)
+		# else:
+		# 	self.cs_preserve_curve_qpushbutton.setEnabled(False)
 
 # to preserve the shape of the curve
 # def query_curve():
