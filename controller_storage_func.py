@@ -5,6 +5,7 @@ import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
 import maya.cmds as cmds
 import controller_storage_ui
+import os
 
 
 class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
@@ -18,6 +19,8 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 		# self.cs_locate_create_curve_json_qpushbutton.clicked.connect()
 		self.cs_filename()
 		self.cs_filepath()
+		self.cs_preserve_curve_qpushbutton.setEnabled(False)
+		self.cs_locate_create_curve_json_qpushbutton.clicked.connect(self.cs_locate_create_button)
 
 	# CAVEAT : Duplicate curve func
 	def cs_duplicate_button_func(self):
@@ -27,14 +30,31 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 	def cs_filename(self):
 		self.cs_json_file_name_qlineedit.setText("controller_storage.json")
 		self.cs_json_file_name_qlineedit.setReadOnly(True)
-	# CAVEAT :
+
+	# CAVEAT : Controller storage directory path
 	def cs_filepath(self):
-		self.cs_preserve_curve_qpushbutton.setEnabled(False)
 		self.cs_locate_json_path_qlineedit.setToolTip("Provide an appropriate directory path")
 		# if self.cs_locate_json_path_qlineedit(filepath):
 		# 	self.cs_preserve_curve_qpushbutton.setEnabled(True)
 		# else:
 		# 	self.cs_preserve_curve_qpushbutton.setEnabled(False)
+
+	# CAVEAT : Locate/Create button func
+	def cs_locate_create_button(self):
+		file_dir = self.cs_locate_json_path_qlineedit.text()
+		file_name = self.cs_json_file_name_qlineedit.text()
+		if file_dir:
+			filepath = os.path.join(self.cs_locate_json_path_qlineedit.text(), self.cs_json_file_name_qlineedit.text())
+			if os.path.isfile(filepath):
+				print "controller_storage.json File already exists"
+			else:
+				with open(filepath, "w") as testing:
+					pass
+				print "controller_storage.json File created"
+		else:
+			print "Kindly provide directory path"
+
+			print filepath
 
 # to preserve the shape of the curve
 # def query_curve():
