@@ -1,8 +1,4 @@
 # func_module_for_ui
-from PySide2 import QtCore
-from PySide2 import QtWidgets
-import maya.OpenMayaUI as omui
-from shiboken2 import wrapInstance
 import maya.cmds as cmds
 import controller_storage_ui
 import os
@@ -57,14 +53,15 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 
 	# CAVEAT : Preserve curve button func will preserve the curve in a .json file
 	def query_curve(self):
-		curve_sel_list_shape = cmds.listRelatives()
+		file_dir = self.cs_locate_json_path_qlineedit.text()
+		file_name = self.cs_json_file_name_qlineedit.text()
+		curve_sel_list_shape = cmds.listRelatives()  # Result: [u'curveShape2'] #
 		if curve_sel_list_shape:
 			if cmds.nodeType(curve_sel_list_shape[0], apiType=True) == "kNurbsCurve":
 				print "It is a kNurbsCurve"
 				# return curve_sel_list_shape
 				# print curve_sel_list_shape
-				if type(curve_sel_list_shape) == list:
-					# if we select curveshape directly that gives an error, kindly fix that in the function
+				if type(curve_sel_list_shape) == list:  # list so that the we can extract single value from it
 					get_curve_points = cmds.getAttr('%s.cv[*]' % curve_sel_list_shape[0])
 					get_curve_degree = cmds.getAttr('%s.degree' % curve_sel_list_shape[0])
 					# get_curve_spans = cmds.getAttr( '%s.spans'%curve_sel_list_shape[0])
@@ -76,14 +73,28 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 					cmds.delete(curve_info_node)
 					# cmds.curve(degree=get_curve_degree, point=get_curve_points, knot=get_curve_knots)
 					# save the script in the json file "curve_dict" first need to create a dict
-					curve_dict = {
-						"{}".format(curve_sel_list_shape[0]): "cmds.curve(degree={}, point={}, knot={})".format(
-							get_curve_degree, get_curve_points,
-							get_curve_knots)}
-					with open(os.path.join(self.cs_locate_json_path_qlineedit.text(),
-										   self.cs_json_file_name_qlineedit.text()), "w") as write_file:
-						json.dump(curve_dict, write_file, indent=4)
-						write_file.close()
+					if os.stat(os.path.join(file_dir, file_name)).st_size == 0:
+						print "no keys at all"
+						curve_dict = {
+							"{}".format(curve_sel_list_shape[0]): "cmds.curve(degree={}, point={}, knot={})".format(
+								get_curve_degree, get_curve_points,
+								get_curve_knots)}  # to save a single key in dict, outside of if did not make any sense
+						with open(os.path.join(file_dir, file_name), "w") as write_file:
+							json.dump(curve_dict, write_file, indent=4)
+							write_file.close()
+					else:
+						print "there are some keys in the json"
+						# reading keys to get existing values in the variable
+						with open(os.path.join(file_dir, file_name), "r") as read_file:
+							curve_dict = json.load(read_file)
+						# dict to dump with existing keys
+						curve_dict["{}".format(curve_sel_list_shape[0])] = "cmds.curve(degree={}, point={}, knot={})".format(get_curve_degree,
+																													get_curve_points,
+																													get_curve_knots)
+						# write the values in the json with new and the old ones
+						with open(os.path.join(file_dir, file_name), "w") as write_file:
+							json.dump(curve_dict, write_file, indent=4)
+							write_file.close()
 				else:
 					print curve_sel_list_shape
 			else:
