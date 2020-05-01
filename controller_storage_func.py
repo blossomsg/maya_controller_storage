@@ -127,7 +127,7 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 		else:
 			print "Kindly select something in the scene"
 
-    # CAVEAT : Read json will read the file for the dict and display in the listwidget
+	# CAVEAT : Read json will read the file for the dict and display in the listwidget
 	def cs_read_json(self):
 		file_dir = self.cs_locate_json_path_qlineedit.text()
 		file_name = self.cs_json_file_name_qlineedit.text()
