@@ -1,4 +1,5 @@
 # func_module_for_ui
+from PySide2 import QtWidgets
 import maya.cmds as cmds
 import controller_storage_ui
 import os
@@ -126,65 +127,29 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 		else:
 			print "Kindly select something in the scene"
 
+    # CAVEAT : Read json will read the file for the dict and display in the listwidget
 	def cs_read_json(self):
 		file_dir = self.cs_locate_json_path_qlineedit.text()
 		file_name = self.cs_json_file_name_qlineedit.text()
 		with open(os.path.join(file_dir, file_name), "r") as read_file:
 			curve_dict = json.load(read_file)
-		self.cs_curve_dict_listwid.addItems(curve_dict.keys())
+		keys = curve_dict.keys()
+		for x in keys:
+			QtWidgets.QListWidgetItem(x,
+									  self.cs_curve_dict_listwid)  # Add the values in the listwid through listwiditem
+		self.cs_curve_dict_listwid.setCurrentRow(0)  # Select the value in the listwidget already
 
+	# CAVEAT : Create curve will create the curve from the selection of listwidget
 	def cs_create_curve(self):
-		print self.cs_curve_dict_listwid.selectedItems()
+		file_dir = self.cs_locate_json_path_qlineedit.text()
+		file_name = self.cs_json_file_name_qlineedit.text()
+		with open(os.path.join(file_dir, file_name), "r") as read_file:
+			curve_dict = json.load(read_file)
+			exec curve_dict[QtWidgets.QListWidgetItem.text(
+				self.cs_curve_dict_listwid.selectedItems()[0])]  # Creation of the selected curve in the listwid
 
-# to preserve the shape of the curve
-# def query_curve():
-# 	curve_sel_list_shape = cmds.listRelatives()
-# 	if curve_sel_list_shape:
-# 		if cmds.nodeType(curve_sel_list_shape[0], apiType=True) == "kNurbsCurve":
-# 			print "It is a kNurbsCurve"
-# 			return curve_sel_list_shape
-# 		else:
-# 			return "Kindly pick a 'kNurbsCurve'"
-# 	else:
-# 		return "Kindly select something in the scene"
-#
 
-# curve_shape = query_curve()
-# if type(curve_shape) == list:
-# 	# if we select curveshape directly that gives an error, kindly fix that in the function
-# 	get_curve_points = cmds.getAttr('%s.cv[*]' % curve_shape[0])
-# 	get_curve_degree = cmds.getAttr('%s.degree' % curve_shape[0])
-# 	# get_curve_spans = cmds.getAttr( '%s.spans'%curve_shape[0])
-# 	curve_info_node = cmds.createNode('curveInfo', name="%s_controller_storage" % curve_shape[0])
-# 	cmds.connectAttr('%s.worldSpace' % curve_shape[0], '%s_controller_storage.inputCurve' % curve_shape[0])
-# 	get_curve_knots = cmds.getAttr('%s_controller_storage.knots[*]' % curve_shape[0])
-# 	cmds.delete(curve_info_node)
-# # cmds.curve(degree=get_curve_degree, point=get_curve_points, knot=get_curve_knots)
-# else:
-# 	print curve_shape
-#
-# # save the script in the json file "curve_dict" first need to create a dict
-# curve_dict = {
-# 	"{}".format(curve_shape[0]): "cmds.curve(degree={}, point={}, knot={})".format(get_curve_degree, get_curve_points,
-# 																				   get_curve_knots)}
-# # exec(curve_dict["trial_t_shirtShape"])
-# # then to append the another key values for more values
-# curve_dict["{}".format(curve_shape[0])] = "cmds.curve(degree={}, point={}, knot={})".format(get_curve_degree,
-# 																							get_curve_points,
-# 																							get_curve_knots)
-#
-# import json
-#
-# with open("D:\\All_Projs\\Maya_Projs\\controller_storage\\testing_data.json", "w") as write_file:
-# 	json.dump(curve_dict, write_file, indent=4)
-# 	write_file.close()
-#
-# with open("D:\\All_Projs\\Maya_Projs\\controller_storage\\testing_data.json", "r") as read_file:
-# 	testing = json.load(read_file)
-# 	exec testing["type_curve_0Shape5"]
-# 	print testing.keys()
-#
-# # try to print json file contents
-# # try to update the json file with multiple values
-# # then try to fetch multiple values like first 1st, then second , thrid, after second point
-# #
+if __name__ == "__main__":
+	print "This is Main ControllerStorageUIFunc"
+else:
+	print "This is ControllerStorageUIFunc"
