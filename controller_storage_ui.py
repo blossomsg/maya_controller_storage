@@ -4,6 +4,7 @@ from PySide2 import QtWidgets
 from PySide2 import QtGui
 import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
+import trial_rcc
 
 ptr = omui.MQtUtil.mainWindow()
 ptr_instance = wrapInstance(long(ptr), QtWidgets.QWidget)
@@ -23,9 +24,9 @@ class ControllerStorageUI(QtWidgets.QWidget):
 		self.setWindowFlags(QtCore.Qt.Window)
 
 		# CAVEAT : Complete UI setup
-		self.cs_image_pixmap = QtGui.QPixmap(
-			"D:\\All_Projs\Maya_Projs\\controller_storage\\controller_storage_label.jpg")
-		self.cs_qlabel_pixmap = QtWidgets.QLabel.setPixmap(self.cs_image_pixmap)
+		self.cs_image_pixmap = QtGui.QPixmap(":/testing/controller_storage_label.jpg")
+		self.cs_qlabel_pixmap = QtWidgets.QLabel()
+		self.cs_qlabel_pixmap.setPixmap(self.cs_image_pixmap)
 		self.cs_duplicate_curve_qpushbutton = QtWidgets.QPushButton("Duplicate_Curve")
 		self.cs_frame = QtWidgets.QFrame()
 		self.cs_frame.setFrameShape(QtWidgets.QFrame.HLine)
@@ -58,9 +59,9 @@ class ControllerStorageUI(QtWidgets.QWidget):
 		# CAVEAT : UI additional details
 		self.setLayout(self.cs_vlayout)
 		self.setWindowTitle("CS v1.0")
-# self.setWindowIcon(provide file path)
-# self.windowIcon(provide file path)
-# self.setFixedSize(300, 100)
+		# self.setWindowIcon(provide file path)
+		# self.windowIcon(provide file path)
+		# self.setFixedSize(300, 100)
 
 
 if __name__ == "__main__":
