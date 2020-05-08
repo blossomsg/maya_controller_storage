@@ -4,7 +4,7 @@ from PySide2 import QtWidgets
 from PySide2 import QtGui
 import maya.OpenMayaUI as omui
 from shiboken2 import wrapInstance
-import trial_rcc
+import controller_storage_rcc
 
 ptr = omui.MQtUtil.mainWindow()
 ptr_instance = wrapInstance(long(ptr), QtWidgets.QWidget)
@@ -59,9 +59,6 @@ class ControllerStorageUI(QtWidgets.QWidget):
 		# CAVEAT : UI additional details
 		self.setLayout(self.cs_vlayout)
 		self.setWindowTitle("CS v1.0")
-		# self.setWindowIcon(provide file path)
-		# self.windowIcon(provide file path)
-		# self.setFixedSize(300, 100)
 
 
 if __name__ == "__main__":

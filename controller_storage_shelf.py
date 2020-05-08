@@ -1,5 +1,5 @@
 import sys
-path = "D:\\All_Projs\\Maya_Projs\\controller_storage"#provide path where you are saving the script
+path =   # provide path where you are saving the script
 if path in sys.path:
     print "path already exists"
 else:

@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="testing">
+    <file>controller_storage_label.jpg</file>
+  </qresource>
+</RCC>
