@@ -153,7 +153,6 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 			print "Kindly provide the file path"
 
 
-
 if __name__ == "__main__":
 	print "This is Main ControllerStorageUIFunc"
 else:
