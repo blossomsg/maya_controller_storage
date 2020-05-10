@@ -131,6 +131,7 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 	def cs_read_json(self):
 		file_dir = self.cs_locate_json_path_qlineedit.text()
 		file_name = self.cs_json_file_name_qlineedit.text()
+		self.cs_curve_dict_listwid.clear()
 		with open(os.path.join(file_dir, file_name), "r") as read_file:
 			curve_dict = json.load(read_file)
 		keys = curve_dict.keys()
@@ -143,10 +144,14 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 	def cs_create_curve(self):
 		file_dir = self.cs_locate_json_path_qlineedit.text()
 		file_name = self.cs_json_file_name_qlineedit.text()
-		with open(os.path.join(file_dir, file_name), "r") as read_file:
-			curve_dict = json.load(read_file)
-			exec curve_dict[QtWidgets.QListWidgetItem.text(
-				self.cs_curve_dict_listwid.selectedItems()[0])]  # Creation of the selected curve in the listwid
+		if file_dir:
+			with open(os.path.join(file_dir, file_name), "r") as read_file:
+				curve_dict = json.load(read_file)
+				exec curve_dict[QtWidgets.QListWidgetItem.text(
+					self.cs_curve_dict_listwid.selectedItems()[0])]  # Creation of the selected curve in the listwid
+		else:
+			print "Kindly provide the file path"
+
 
 
 if __name__ == "__main__":
