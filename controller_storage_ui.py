@@ -36,6 +36,7 @@ class ControllerStorageUI(QtWidgets.QWidget):
 		self.cs_json_file_name_qlineedit = QtWidgets.QLineEdit()
 		self.cs_preserve_curve_qpushbutton = QtWidgets.QPushButton("Preserve_Curve")
 		self.cs_read_json_file_qpushbutton = QtWidgets.QPushButton("Read_JSON_File")
+		self.cs_curve_delete_qpushbutton = QtWidgets.QPushButton("Delete_Curve")
 		self.cs_curve_dict_listwid = QtWidgets.QListWidget()
 		self.cs_create_selected_curve_qpushbutton = QtWidgets.QPushButton("Create_Selected_Curve")
 
@@ -53,12 +54,13 @@ class ControllerStorageUI(QtWidgets.QWidget):
 		self.cs_vlayout.addLayout(self.cs_locate_json_hlayout)
 		self.cs_vlayout.addWidget(self.cs_preserve_curve_qpushbutton)
 		self.cs_vlayout.addWidget(self.cs_read_json_file_qpushbutton)
+		self.cs_vlayout.addWidget(self.cs_curve_delete_qpushbutton)
 		self.cs_vlayout.addWidget(self.cs_curve_dict_listwid)
 		self.cs_vlayout.addWidget(self.cs_create_selected_curve_qpushbutton)
 
 		# CAVEAT : UI additional details
 		self.setLayout(self.cs_vlayout)
-		self.setWindowTitle("CS v1.0")
+		self.setWindowTitle("CS v0.0.2")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 # func_module_for_ui
 from PySide2 import QtWidgets
+from PySide2 import QtCore
 import maya.cmds as cmds
 import controller_storage_ui
 import os
@@ -19,9 +20,14 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 		self.cs_filename()
 		self.cs_preserve_curve_qpushbutton.setEnabled(False)
 		self.cs_read_json_file_qpushbutton.setEnabled(False)
+		self.cs_curve_delete_qpushbutton.setEnabled(False)
 		self.cs_locate_create_curve_json_qpushbutton.clicked.connect(self.cs_locate_create_button)
+		self.settings = QtCore.QSettings()
+		string_text = self.settings.value("path")
+		self.cs_locate_json_path_qlineedit.setText(string_text)
 		self.cs_preserve_curve_qpushbutton.clicked.connect(self.cs_query_curve)
 		self.cs_read_json_file_qpushbutton.clicked.connect(self.cs_read_json)
+		self.cs_curve_delete_qpushbutton.clicked.connect(self.cs_delete_json_keys)
 		self.cs_create_selected_curve_qpushbutton.clicked.connect(self.cs_create_curve)
 
 	# CAVEAT : Controller storage directory path tooltip
@@ -29,7 +35,7 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 		self.cs_duplicate_curve_qpushbutton.setToolTip("Creates duplicate of the curve on the spot")
 		self.cs_locate_json_path_qlineedit.setToolTip("Provide an appropriate directory path")
 		self.cs_preserve_curve_qpushbutton.setToolTip(
-			"Enables once the jason file location is confirmed,"
+			"Enables once the json file location is confirmed,"
 			"Preserves nurbs curve in a json file(kindly provide a unique name, or it will override existing key)")
 		self.cs_locate_create_curve_json_qpushbutton.setToolTip("Confirms if the json file exists in the "
 																"mentioned path or not and enables the Preserve "
@@ -62,6 +68,7 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 	def cs_locate_create_button(self):
 		file_dir = self.cs_locate_json_path_qlineedit.text()
 		file_name = self.cs_json_file_name_qlineedit.text()
+		self.settings.setValue("path", self.cs_locate_json_path_qlineedit.text())
 		if file_dir:
 			filepath = os.path.join(file_dir, file_name)  # filepath of the dir
 			if os.path.isfile(filepath):
@@ -131,6 +138,7 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 	def cs_read_json(self):
 		file_dir = self.cs_locate_json_path_qlineedit.text()
 		file_name = self.cs_json_file_name_qlineedit.text()
+		self.cs_curve_delete_qpushbutton.setEnabled(True)
 		self.cs_curve_dict_listwid.clear()
 		with open(os.path.join(file_dir, file_name), "r") as read_file:
 			curve_dict = json.load(read_file)
@@ -138,7 +146,21 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 		for x in keys:
 			QtWidgets.QListWidgetItem(x,
 									  self.cs_curve_dict_listwid)  # Add the values in the listwid through listwiditem
-		self.cs_curve_dict_listwid.setCurrentRow(0)  # Select the value in the listwidget already
+		self.cs_curve_dict_listwid.setCurrentRow(0)  # Keep the first value selected in the listwidget
+
+	def cs_delete_json_keys(self):
+		file_dir = self.cs_locate_json_path_qlineedit.text()
+		file_name = self.cs_json_file_name_qlineedit.text()
+		with open(os.path.join(file_dir, file_name), "r") as read_file:  # read the json file
+			curve_dict = json.load(read_file)
+		# the selection from the list_wid is converted to text and deleted from the above variable(keys:values) dict
+		del curve_dict[str(self.cs_curve_dict_listwid.currentItem().text())]  # delete the selected key from list_wid
+		# print curve_dict.keys()
+		with open(os.path.join(file_dir, file_name), "w") as write_file:  # dumping the updated key values in json
+			json.dump(curve_dict, write_file, indent=4)
+			write_file.close()
+		self.cs_read_json()  # after deleting again read the updated json file
+		# print self.cs_curve_dict_listwid.currentItem().text()
 
 	# CAVEAT : Create curve will create the curve from the selection of listwidget
 	def cs_create_curve(self):
