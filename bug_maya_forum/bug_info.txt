@@ -1,0 +1,44 @@
+Node Issue: curveInfo, once calculates more knots, wont calculate less knots 
+
+Hello Guys,
+
+I have been facing an issue with maya curveinfo node,
+
+so i have an eg(excuse the names),
+cube_cone_curves
+i created cube curve by snapping ep curve on cube poly
+and then created another curve snapping points on cone poly
+
+and parented both the curveShapes, with below command
+parent -r -s <curveShapeName> <transformName>;
+
+and then duplicated curves and and renamed again the curves and shapes to avoid name clashes
+
+Now the problem begins
+firstcase:-
+1 transform 2 shapes, 
+i want "knot values" of both the shapes, so i create a curveinfo node and gave inputCurve for cubeShape 1
+query knot values with
+cmds.getAttr("curveInfo3.knots") 
+
+disconnect and connect again inputCurve for Coneshape 2
+query knot values with
+cmds.getAttr("curveInfo3.knots") 
+
+secondcase:-
+1 transform 2 shapes, 
+i want "knot values" of both the shapes, so i create 2 curveinfo nodes and give connect cubeShape 1 and coneShape 2 to curveInfo 1 and curveInfo 2
+query knot values with
+cmds.getAttr("curveInfo1.knots")
+cmds.getAttr("curveInfo2.knots")
+
+if you see the results its different 
+12 knots for cone
+18 knots for cube
+
+There are workarounds but needed to bring to your notice, 
+it makes it difficult to use single curveinfo for multiple curves(during for loop, connect and disconnect to multiple curves), it might give wrong values
+or i also might be wrong its purpose is to be used once 
+and for second curve we need new curveInfo, waiting for your feedback
+
+https://forums.autodesk.com/t5/maya-forum/node-issue-curveinfo-once-calculates-more-knots-wont-calculate/m-p/9651280#M82897

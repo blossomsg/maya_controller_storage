@@ -95,14 +95,19 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 			if curve_type:
 				curve_dict = {}
 				curves = []
-				curve_info_node = cmds.createNode('curveInfo', name="%s_controller_storage" % curve_sel_list_shape[0])
-				# Below for loop helps to store multiple shape values in the list "curves"
+				curve_info_node_list = []
+				# Saving multiple curveinfo in the above list
 				for each_curve in curve_sel_list_shape:
-					cmds.connectAttr('%s.worldSpace' % each_curve,
-									 '%s_controller_storage.inputCurve' % curve_sel_list_shape[0])
-					get_curve_knots = cmds.getAttr('%s_controller_storage.knots[*]' % curve_sel_list_shape[0])
-					get_curve_points = cmds.getAttr('%s.cv[*]' % each_curve)
-					get_curve_degree = cmds.getAttr('%s.degree' % each_curve)
+					curve_info_node = cmds.createNode('curveInfo',
+													  name="%s_controller_storage" % curve_sel_list_shape[0])
+					curve_info_node_list.append(curve_info_node)
+				# Below for loop helps to store multiple shape values in the list "curves"
+				for x, y in zip(curve_sel_list_shape, curve_info_node_list):
+					cmds.connectAttr('%s.worldSpace' % x,
+									 '%s.inputCurve' % y)
+					get_curve_knots = cmds.getAttr('%s.knots[*]' % y)
+					get_curve_points = cmds.getAttr('%s.cv[*]' % x)
+					get_curve_degree = cmds.getAttr('%s.degree' % x)
 					# print get_curve_knots
 					# print get_curve_points
 					# print get_curve_degree
@@ -110,10 +115,10 @@ class ControllerStorageFunc(controller_storage_ui.ControllerStorageUI):
 						get_curve_degree,
 						get_curve_points,
 						get_curve_knots))
-					cmds.disconnectAttr('%s.worldSpace' % each_curve,
-										'%s_controller_storage.inputCurve' % curve_sel_list_shape[0])
 					# print each_curve
-				cmds.delete(curve_info_node)
+				for x, y in zip(curve_sel_list_shape, curve_info_node_list):
+					cmds.disconnectAttr('%s.worldSpace' % x, '%s.inputCurve' % y)
+					cmds.delete(y)
 				# print curves
 				if os.stat(os.path.join(file_dir, file_name)).st_size == 0:  # checks the size of the json
 					print "Empty json file, adding first key"
@@ -202,3 +207,63 @@ if __name__ == "__main__":
 	print "This is Main ControllerStorageUIFunc"
 else:
 	print "This is ControllerStorageUIFunc"
+
+# curve_sel_list_shape = cmds.listRelatives()
+# cmds.nodeType(curve_sel_list_shape[0], apiType=True) == "kNurbsCurve"
+#
+# if curve_sel_list_shape:
+# 	curve_dict = {}
+# 	curves = []
+# 	curve_info_node = cmds.createNode('curveInfo',
+# 									  name="%s_controller_storage" % curve_sel_list_shape[0])
+# 	# print "more than 1"
+# 	for x in curve_sel_list_shape:
+# 		if cmds.nodeType(x, apiType=True) == "kNurbsCurve":
+# 			print "It is a kNurbsCurve"
+# 			cmds.connectAttr('%s.worldSpace' % x,
+# 							 '%s_controller_storage.inputCurve' % curve_sel_list_shape[0])
+# 			get_curve_knots = cmds.getAttr('%s_controller_storage.knots[*]' % curve_sel_list_shape[0])
+# 			get_curve_points = cmds.getAttr('%s.cv[*]' % x)
+# 			get_curve_degree = cmds.getAttr('%s.degree' % x)
+# 			#            cmds.connectAttr('%s.worldSpace' % x,'%s_controller_storage.inputCurve' % curve_sel_list_shape[0])
+# 			print get_curve_knots
+# 			# print get_curve_points
+# 			# print get_curve_degree
+# 			curves.append("cmds.curve(degree={}, point={}, knot={})".format(
+# 				get_curve_degree,
+# 				get_curve_points,
+# 				get_curve_knots))
+# 			cmds.disconnectAttr('%s.worldSpace' % x, '%s_controller_storage.inputCurve' % curve_sel_list_shape[0])
+# 			# print x
+# 			print get_curve_knots
+# 	#            curve_dict[
+# 	#							"{}".format(curve_sel_list_shape[0])] = ["cmds.curve(degree={}, point={}, knot={})".format(
+# 	#							get_curve_degree,
+# 	#							get_curve_points,
+# 	#							get_curve_knots)]
+# 	cmds.delete(curve_info_node)
+# 	print curves
+# 	curve_dict["{}".format(curve_sel_list_shape[0])] = curves
+# 	print curve_dict
+# 	print curve_dict.get("curveShape1")
+# 	names_list = []
+# 	len(curve_dict.get("curveShape1"))
+# 	for x in curve_dict.get("curveShape1"):
+# 		exec x
+# 		cmds.rename(curve_sel_list_shape[0][:-5])
+#
+# 		names = names_list.append(cmds.ls(sl=True))
+# 	# print names_list
+# 	# if multi shape
+# 	if len(curve_sel_list_shape) > 1:
+# 		names_flatten = [x for x in names_list for x in x]
+# 		for x in names_flatten[1:]:
+# 			for y in cmds.listRelatives(x):
+# 				print y
+# 				cmds.parent(y, names_flatten[0], relative=True, shape=True)
+# 			cmds.delete(x)
+#
+#
+#
+#
+#
