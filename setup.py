@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="controller_storage-pkg-bghu", # Replace with your own username
-    version="0.0.2",
+    version="0.0.3",
     author="Blossom Author",
     author_email="bghuntla123@gmail.com",
     description="Maya package",

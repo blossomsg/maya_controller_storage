@@ -60,7 +60,7 @@ class ControllerStorageUI(QtWidgets.QWidget):
 
 		# CAVEAT : UI additional details
 		self.setLayout(self.cs_vlayout)
-		self.setWindowTitle("CS v0.0.2")
+		self.setWindowTitle("CS v0.0.3")
 
 
 if __name__ == "__main__":
